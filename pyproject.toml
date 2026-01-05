@@ -8,6 +8,7 @@ dependencies = [
     "beautifulsoup4>=4.14.3",
     "fake-useragent>=2.2.0",
     "lxml>=6.0.2",
+    "minio>=7.2.20",
     "pandas>=2.3.3",
     "python-dotenv>=1.2.1",
     "requests>=2.32.5",

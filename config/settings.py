@@ -6,15 +6,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# @dataclass
-# class MinIOConfig:
-#     endpoint: str = os.getenv("S3_ENDPOINT", "localhost:9000")
-#     access_key: str = os.getenv("S3_ACCESS_KEY", "minioadmin")
-#     secret_key: str = os.getenv("S3_SECRET_KEY", "minioadmin123")
-#     secure: bool = os.getenv("S3_SECURE", "false").lower() == "true"
-#     bucket_images: str = "products-images"
-#     bucket_exports: str = "products-exports"
-#     bucket_backups: str = "products-backups"
+@dataclass
+class MinIOConfig:
+    endpoint: str = os.getenv("MINIO_ENDPOINT")
+    access_key: str = os.getenv("MINIO_ROOT_USER")
+    secret_key: str = os.getenv("MINIO_ROOT_PASSWORD")
+    secure: bool = False
+    bucket_images: str = os.getenv("BUCKET_IMAGES", "images")
+    bucket_exports: str = os.getenv("BUCKET_EXPORTS", "exports")
+    bucket_backups: str = os.getenv("BUCKET_BACKUPS", "backups")
 
 
 # @dataclass
@@ -48,7 +48,7 @@ class APIAdressConfig:
     max_retries: int = 3
 
 
-# minio_config = MinIOConfig()
+minio_config = MinIOConfig()
 # mongo_config = MongoDBConfig()
 quotes_scraper_config = QuotesScraperConfig()
 api_adress_config = APIAdressConfig()
