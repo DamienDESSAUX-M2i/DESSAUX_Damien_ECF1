@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from src import set_up_logger
+from src import QuotesPipeline, set_up_logger
 
 DIR_PATH = Path(__file__).parent.resolve()
 
@@ -14,6 +14,9 @@ def main() -> None:
     logger: logging.Logger = set_up_logger(
         name="app", log_file_path=log_file_path, level=logging.INFO
     )
+
+    quotes_pipeline = QuotesPipeline()
+    quotes_pipeline.run()
 
 
 if __name__ == "__main__":
