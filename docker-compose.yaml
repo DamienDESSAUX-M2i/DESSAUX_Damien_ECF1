@@ -20,8 +20,48 @@ services:
       - network_app
     command: ["server", "/data", "--console-address" ,":9001"]
 
+  pgdb:
+    image: postgres
+    container_name: pgdb
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - v_pgsql:/var/lib/postgresql
+      - ./postgresql_initdb:/docker-entrypoint-initdb.d # volume bind mounts pour l'initiatlisation de la BDD
+    networks:
+      - network_app
+      - network_pgdb
+
+  pgadmin:
+    depends_on:
+      - pgdb
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    env_file:
+      - ./.env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    volumes:
+      - v_pgadmin:/var/lib/pgadmin
+    networks:
+      - network_pgdb
+
 volumes:
   v_minio:
+  v_pgsql:
+  v_pgadmin:
 
 networks:
   network_app:
+  network_pgdb:

@@ -17,17 +17,21 @@ class MinIOConfig:
     bucket_backups: str = os.getenv("BUCKET_BACKUPS", "backups")
 
 
-# @dataclass
-# class MongoDBConfig:
-#     host: str = os.getenv("MONGO_HOST", "localhost")
-#     port: int = int(os.getenv("MONGO_PORT", "27017"))
-#     username: str = os.getenv("MONGO_USER", "admin")
-#     password: str = os.getenv("MONGO_PASSWORD", "admin123")
-#     database: str = os.getenv("MONGO_DB", "scraping_db")
+@dataclass
+class PostgreSQLConfig:
+    host: str = "localhost"
+    port: int = 5432
+    user: str = os.getenv("POSTGRES_USER")
+    password: str = os.getenv("POSTGRES_PASSWORD")
+    dbname: str = os.getenv("POSTGRES_DB")
 
-#     @property
-#     def connection_string(self) -> str:
-#         return f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}/"
+    @property
+    def dsn(self) -> str:
+        return f"dbname={self.dbname} user={self.user} password={self.password} host={self.host} port={self.port}"
+
+    @property
+    def connection_string(self) -> str:
+        return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.dbname}"
 
 
 @dataclass
@@ -49,6 +53,6 @@ class APIAdressConfig:
 
 
 minio_config = MinIOConfig()
-# mongo_config = MongoDBConfig()
+postgresql_config = PostgreSQLConfig()
 quotes_scraper_config = QuotesScraperConfig()
 api_adress_config = APIAdressConfig()
