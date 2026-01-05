@@ -1,0 +1,5 @@
+# 1. Une requête d'agrégation simple
+# 2. Une requête avec jointure
+# 3. Une requête avec fonction de fenêtrage (window function)
+# 4. Une requête de classement (top N)
+# 5. Une requête croisant au moins 2 sources de données
