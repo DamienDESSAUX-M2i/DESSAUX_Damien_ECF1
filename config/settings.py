@@ -39,6 +39,16 @@ class QuotesScraperConfig:
     max_pages: int = 20
 
 
+@dataclass
+class APIAdressConfig:
+    base_url: str = "https://api-adresse.data.gouv.fr/"
+    endpoint: str = "search"
+    delay: float = 1.0
+    timeout: int = 30
+    max_retries: int = 3
+
+
 # minio_config = MinIOConfig()
 # mongo_config = MongoDBConfig()
 quotes_scraper_config = QuotesScraperConfig()
+api_adress_config = APIAdressConfig()
