@@ -1,18 +1,18 @@
 import logging
 from pathlib import Path
 
-from src.utils.logger import set_up_logger
+from src import set_up_logger
 
-DIR_PATH = Path(__file__).resolve()
+DIR_PATH = Path(__file__).parent.resolve()
 
 
 def main() -> None:
-    log_dir = DIR_PATH / "logs"
-    if not log_dir.exists():
-        log_dir.mkdir()
-    logger_path = log_dir / "app.log"
+    log_dir_path = DIR_PATH / "logs"
+    if not log_dir_path.exists():
+        log_dir_path.mkdir()
+    log_file_path = log_dir_path / "app.log"
     logger: logging.Logger = set_up_logger(
-        name="app", path=logger_path, level=logging.INFO
+        name="app", log_file_path=log_file_path, level=logging.INFO
     )
 
 
