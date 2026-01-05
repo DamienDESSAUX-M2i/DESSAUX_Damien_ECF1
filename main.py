@@ -1,3 +1,4 @@
+import argparse
 import logging
 from pathlib import Path
 
@@ -15,8 +16,12 @@ def main() -> None:
         name="app", log_file_path=log_file_path, level=logging.INFO
     )
 
-    quotes_pipeline = QuotesPipeline()
-    quotes_pipeline.run()
+    parser = argparse.ArgumentParser(description="Activates Pipelines")
+    parser.add_argument("--quotes", action="store_true", help="Active quotes pipeline")
+    args = parser.parse_args()
+
+    if args.quotes:
+        QuotesPipeline().run()
 
 
 if __name__ == "__main__":

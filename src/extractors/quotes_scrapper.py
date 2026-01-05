@@ -59,12 +59,10 @@ class QuotesScraper:
             logger.error(f"fetch_failed: {e}")
             raise
 
-    def scrape_quotes(
-        self, url: str, max_pages: int = None
-    ) -> Generator[Quote, None, None]:
+    def scrape_quotes(self, max_pages: int = None) -> Generator[Quote, None, None]:
         max_pages = max_pages or quotes_scraper_config.max_pages
         page = 1
-        current_url = url
+        current_url = quotes_scraper_config.base_url
 
         while current_url and page <= max_pages:
             logger.info(f"scraping_page: {current_url}")
@@ -87,7 +85,7 @@ class QuotesScraper:
                         yield quote
 
                 # Trouver la page suivante
-                current_url = self._get_next_page(soup, url)
+                current_url = self._get_next_page(soup, quotes_scraper_config.base_url)
                 page += 1
 
             except Exception as e:
@@ -128,10 +126,7 @@ if __name__ == "__main__":
 
     # Test sur 2 pages
     quotes = []
-    for quote in quotes_scraper.scrape_quotes(
-        url=quotes_scraper_config.base_url,
-        max_pages=2,
-    ):
+    for quote in quotes_scraper.scrape_quotes(max_pages=2):
         quotes.append(quote)
         print(f"{quote.text} - {quote.author} - {quote.tags}")
 

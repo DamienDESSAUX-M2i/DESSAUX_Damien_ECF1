@@ -40,13 +40,10 @@ class QuotesPipeline:
     def _extract(self) -> list[Quote]:
         quotes = []
 
-        for quote in self.quotes_scraper.scrape_quotes(
-            url=quotes_scraper_config.base_url,
-            max_pages=20,
-        ):
+        for quote in self.quotes_scraper.scrape_quotes():
             quotes.append(quote)
 
-        logger.info(f"Total: {len(quotes)} quotes scrapés")
+        logger.info(f"Number of quotes scrapped: {len(quotes)}")
 
         self.quotes_scraper.close()
 
@@ -76,12 +73,15 @@ class QuotesPipeline:
             for tag in quote.tags:
                 if tag not in dict_tags.keys():
                     id_tag = len(dict_tags) + 1
-                    dict_authors[tag] = id_tag
+                    dict_tags[tag] = id_tag
                 else:
                     id_tag = dict_tags[tag]
 
                 # quotes_tags
                 list_quotes_tags.append({"id_quote": id_quote, "id_tag": id_tag})
+
+        logger.info(f"Number of authors: {len(dict_authors)}")
+        logger.info(f"Number of tags: {len(dict_tags)}")
 
         return dict_authors, list_quotes, dict_tags, list_quotes_tags
 
@@ -93,27 +93,49 @@ class QuotesPipeline:
         list_quotes_tags: list,
     ) -> None:
         # authors
+        nb_authors_inserted = 0
         for author_name, id_author in dict_authors.items():
-            self.postgresql_storage.insert_into_authors(
+            result = self.postgresql_storage.insert_into_authors(
                 id_author=id_author, author_name=author_name
             )
 
+            if result:
+                nb_authors_inserted += 1
+        logger.info(f"Number of authors inserted: {nb_authors_inserted}")
+
         # quotes
+        nb_quotes_inserted = 0
         for quote in list_quotes:
-            self.postgresql_storage.insert_into_quotes(
+            result = self.postgresql_storage.insert_into_quotes(
                 id_quote=quote["id_quote"],
                 text=quote["text"],
                 id_author=quote["id_author"],
             )
 
+            if result:
+                nb_quotes_inserted += 1
+        logger.info(f"Number of quotes inserted: {nb_quotes_inserted}")
+
         # tags
+        nb_tag_inserted = 0
         for tag_name, id_tag in dict_tags.items():
-            self.postgresql_storage.insert_into_tags(id_tag=id_tag, tag_name=tag_name)
+            result = self.postgresql_storage.insert_into_tags(
+                id_tag=id_tag, tag_name=tag_name
+            )
+
+            if result:
+                nb_tag_inserted += 1
+        logger.info(f"Number of tags inserted: {nb_tag_inserted}")
 
         # quotes_tags
+        nb_quotes_tegs_inserted = 0
         for quote_tag in list_quotes_tags:
             self.postgresql_storage.insert_into_quotes_tags(
                 id_quote=quote_tag["id_quote"], id_tag=quote_tag["id_tag"]
             )
+
+            if result:
+                nb_quotes_tegs_inserted += 1
+        logger.info(f"Number of quotes_tags inserted: {nb_quotes_tegs_inserted}")
 
         self.postgresql_storage.close()

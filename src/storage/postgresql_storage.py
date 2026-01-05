@@ -30,10 +30,11 @@ class PostgreSQLStorage:
     def insert_into_authors(self, id_author: int, author_name: str) -> dict | None:
         try:
             self.cursor.execute(
-                "INSERT INTO authors (id_author, author_name) VALUES (%s, %s) RETURNING *;",
+                "INSERT INTO authors (id_author, author_name) VALUES (%s, %s) ON CONFLICT DO NOTHING RETURNING *;",
                 (id_author, author_name),
             )
-            logger.info(f"insert_into_authors: {id_author = }, {author_name = }")
+            self.connection.commit()
+            logger.debug(f"insert_into_authors: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"insert_into_authors_failed: {e}")
@@ -50,7 +51,8 @@ class PostgreSQLStorage:
                 """,
                 (author_name, id_author),
             )
-            logger.info(f"update_author: {id_author = }")
+            self.connection.commit()
+            logger.debug(f"update_author: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"update_author_failed: {e}")
@@ -62,7 +64,8 @@ class PostgreSQLStorage:
                 "DELETE FROM authors WHERE id_author=%s RETURNING *;",
                 (id_author,),
             )
-            logger.info(f"delete_author: {id_author = }")
+            self.connection.commit()
+            logger.debug(f"delete_author: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"delete_author_failed: {e}")
@@ -84,10 +87,11 @@ class PostgreSQLStorage:
     def insert_into_tags(self, id_tag: int, tag_name: str) -> dict | None:
         try:
             self.cursor.execute(
-                "INSERT INTO tags (id_tag, tag_name) VALUES (%s, %s) RETURNING *;",
+                "INSERT INTO tags (id_tag, tag_name) VALUES (%s, %s) ON CONFLICT DO NOTHING RETURNING *;",
                 (id_tag, tag_name),
             )
-            logger.info(f"insert_into_tags: {id_tag = }, {tag_name = }")
+            self.connection.commit()
+            logger.debug(f"insert_into_tags: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"insert_into_tags_failed: {e}")
@@ -104,7 +108,8 @@ class PostgreSQLStorage:
                 """,
                 (tag_name, id_tag),
             )
-            logger.info(f"update_tag: {id_tag = }")
+            self.connection.commit()
+            logger.debug(f"update_tag: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"update_tag_failed: {e}")
@@ -116,7 +121,8 @@ class PostgreSQLStorage:
                 "DELETE FROM tags WHERE id_tag=%s RETURNING *;",
                 (id_tag,),
             )
-            logger.info(f"delete_tag: {id_tag = }")
+            self.connection.commit()
+            logger.debug(f"delete_tag: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"delete_tag_failed: {e}")
@@ -148,10 +154,11 @@ class PostgreSQLStorage:
     ) -> dict | None:
         try:
             self.cursor.execute(
-                "INSERT INTO quotes (id_quote, text, id_author) VALUES (%s, %s, %s) RETURNING *;",
+                "INSERT INTO quotes (id_quote, text, id_author) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING RETURNING *;",
                 (id_quote, text, id_author),
             )
-            logger.info(f"insert_into_quotes: {id_quote = }, {text = }, {id_author = }")
+            self.connection.commit()
+            logger.debug(f"insert_into_quotes: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"insert_into_quotes_failed: {e}")
@@ -168,7 +175,8 @@ class PostgreSQLStorage:
                 """,
                 (text, id_author, id_quote),
             )
-            logger.info(f"update_quote: {id_author = }")
+            self.connection.commit()
+            logger.debug(f"update_quote: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"update_quote_failed: {e}")
@@ -180,7 +188,8 @@ class PostgreSQLStorage:
                 "DELETE FROM quotes WHERE id_quote=%s RETURNING *;",
                 (id_quote,),
             )
-            logger.info(f"delete_quote: {id_quote = }")
+            self.connection.commit()
+            logger.debug(f"delete_quote: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"delete_quote_failed: {e}")
@@ -212,10 +221,11 @@ class PostgreSQLStorage:
     def insert_into_quotes_tags(self, id_quote: int, id_tag: int) -> dict | None:
         try:
             self.cursor.execute(
-                "INSERT INTO quotes_tags (id_quote, id_tag) VALUES (%s, %s) RETURNING *;",
+                "INSERT INTO quotes_tags (id_quote, id_tag) VALUES (%s, %s) ON CONFLICT DO NOTHING RETURNING *;",
                 (id_quote, id_tag),
             )
-            logger.info(f"insert_into_quotes_tags: {id_quote = }, {id_tag = }")
+            self.connection.commit()
+            logger.debug(f"insert_into_quotes_tags: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"insert_into_quotes_failed: {e}")
@@ -234,7 +244,8 @@ class PostgreSQLStorage:
                 """,
                 (new_id_quote, new_id_tag, id_quote, id_tag),
             )
-            logger.info(f"update_quote: {new_id_quote = }, {new_id_tag = }")
+            self.connection.commit()
+            logger.debug(f"update_quote: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"update_quote_failed: {e}")
@@ -246,7 +257,8 @@ class PostgreSQLStorage:
                 "DELETE FROM quotes_tags WHERE id_quote=%s AND id_tag=%s RETURNING *;",
                 (id_quote, id_tag),
             )
-            logger.info(f"delete_quote: {id_quote = }, {id_tag = }")
+            self.connection.commit()
+            logger.debug(f"delete_quote: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
             logger.error(f"delete_quote_failed: {e}")
