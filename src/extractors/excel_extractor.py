@@ -24,5 +24,5 @@ class ExcelExtractor:
             logger.info(f"Extraction completed : {len(dict_dfs)} sheets extracted.")
             return dict_dfs
         except Exception as e:
-            logger.error(f"Error CSV extractor: {e}.")
+            logger.error(f"Error Excel extractor: {e}.")
             raise

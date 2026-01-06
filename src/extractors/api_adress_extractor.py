@@ -21,7 +21,7 @@ class APIAdressExtractor:
             total=api_adress_config.max_retries, backoff_factor=api_adress_config.delay
         )
 
-    def get(self, params: dict[str, Any] = {}) -> requests.Response:
+    def get(self, params: dict[str, Any] = {}) -> dict:
         try:
             logger.info(f"Attempting request {self.base_url}/{self.endpoint}.")
 
@@ -41,7 +41,7 @@ class APIAdressExtractor:
             response.raise_for_status()
             data = response.json()
 
-            logger.info(f"Extraction completed : {len(data)} entries.")
+            logger.info("Extraction completed.")
             return data
         except Exception as e:
             logger.error(f"API Extractor Error : {e}")

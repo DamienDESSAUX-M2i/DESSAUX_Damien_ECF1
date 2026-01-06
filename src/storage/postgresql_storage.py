@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 import psycopg
@@ -245,10 +246,10 @@ class PostgreSQLStorage:
                 (new_id_quote, new_id_tag, id_quote, id_tag),
             )
             self.connection.commit()
-            logger.debug(f"update_quote: {self.cursor.fetchone()}")
+            logger.debug(f"update_quote_tag: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
-            logger.error(f"update_quote_failed: {e}")
+            logger.error(f"update_quote_tag_failed: {e}")
             return None
 
     def delete_quote_tag(self, id_quote: int, id_tag: int) -> dict | None:
@@ -258,11 +259,204 @@ class PostgreSQLStorage:
                 (id_quote, id_tag),
             )
             self.connection.commit()
-            logger.debug(f"delete_quote: {self.cursor.fetchone()}")
+            logger.debug(f"delete_quote_tag: {self.cursor.fetchone()}")
             return self.cursor.fetchone()
         except Exception as e:
-            logger.error(f"delete_quote_failed: {e}")
+            logger.error(f"delete_quote_tag_failed: {e}")
             return None
+
+    # LIBRAIRIES - librairies
+
+    def select_librairie(self, id_librairie: int) -> list[dict] | None:
+        try:
+            self.cursor.execute(
+                """
+                SELECT *
+                FROM librairies
+                WHERE qt.id_librairie=%s;
+                """,
+                (id_librairie,),
+            )
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"select_librairie_failed: {e}")
+            return None
+
+    def insert_into_librairies(
+        self,
+        id_librairie: int,
+        nom_librairie: str,
+        adresse: str,
+        code_postal: str,
+        ville: str,
+        contact_initiales: str,
+        contact_email: str,
+        contact_telephone: str,
+        date_partenariat: datetime,
+        specialite: str,
+        latitude: float,
+        longitude: float,
+    ) -> dict | None:
+        try:
+            self.cursor.execute(
+                "INSERT INTO librairies (id_librairie, nom_librairie, adresse, code_postal, ville, contact_initiales, contact_email, contact_telephone, date_partenariat, specialite, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING RETURNING *;",
+                (
+                    id_librairie,
+                    nom_librairie,
+                    adresse,
+                    code_postal,
+                    ville,
+                    contact_initiales,
+                    contact_email,
+                    contact_telephone,
+                    date_partenariat,
+                    specialite,
+                    latitude,
+                    longitude,
+                ),
+            )
+            self.connection.commit()
+            logger.debug(f"insert_into_librairies: {self.cursor.fetchone()}")
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"insert_into_librairies_failed: {e}")
+            return None
+
+    def update_librairie(
+        self,
+        id_librairie: int,
+        nom_librairie: str,
+        adresse: str,
+        code_postal: str,
+        ville: str,
+        contact_initiales: str,
+        contact_email: str,
+        contact_telephone: str,
+        date_partenariat: datetime,
+        specialite: str,
+        latitude: float,
+        longitude: float,
+    ) -> dict | None:
+        try:
+            self.cursor.execute(
+                """
+                UPDATE librairies
+                SET nom_librairie=%s, adresse=%s, code_postal=%s, ville=%s, contact_initiales=%s, contact_email=%s, contact_telephone=%s, date_partenariat=%s, specialite=%s, latitude=%s, longitude=%s
+                WHERE id_librairie=%s
+                RETURNING *;
+                """,
+                (
+                    nom_librairie,
+                    adresse,
+                    code_postal,
+                    ville,
+                    contact_initiales,
+                    contact_email,
+                    contact_telephone,
+                    date_partenariat,
+                    specialite,
+                    id_librairie,
+                    latitude,
+                    longitude,
+                ),
+            )
+            self.connection.commit()
+            logger.debug(f"update_librairie: {self.cursor.fetchone()}")
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"update_librairie_failed: {e}")
+            return None
+
+    def delete_librairie(self, id_librairie: int) -> dict | None:
+        try:
+            self.cursor.execute(
+                "DELETE FROM librairies WHERE id_librairie=%s RETURNING *;",
+                (id_librairie,),
+            )
+            self.connection.commit()
+            logger.debug(f"delete_librairie: {self.cursor.fetchone()}")
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"delete_librairie_failed: {e}")
+            return None
+
+    # LIBRAIRIES - ca_annuel
+
+    def select_ca_annuel(self, id_ca_annuel: int) -> list[dict] | None:
+        try:
+            self.cursor.execute(
+                """
+                SELECT
+                    l.nom_librairie,
+                    l.adresse,
+                    l.code_postal,
+                    l.ville,
+                    l.contact_initiales,
+                    l.contact_email,
+                    l.contact_telephone,
+                    l.date_partenariat,
+                    l.specialite,
+                    c.ca_annuel
+                FROM ca_annuel AS ca
+                INNER JOIN librairies AS l ON ca.id_ca_annuel = l.id_ca_annuel
+                WHERE qt.id_ca_annuel=%s;
+                """,
+                (id_ca_annuel,),
+            )
+            return list(self.cursor.fetchall())
+        except Exception as e:
+            logger.error(f"select_ca_annuel_failed: {e}")
+            return None
+
+    def insert_into_ca_annuel(
+        self, id_ca_annuel: int, ca_annuel: float, id_librairie: int
+    ) -> dict | None:
+        try:
+            self.cursor.execute(
+                "INSERT INTO ca_annuel (id_ca_annuel, ca_annuel, id_librairie) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING RETURNING *;",
+                (id_ca_annuel, ca_annuel, id_librairie),
+            )
+            self.connection.commit()
+            logger.debug(f"insert_into_ca_annuel: {self.cursor.fetchone()}")
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"insert_into_ca_annuel_failed: {e}")
+            return None
+
+    def update_ca_annuel(
+        self, id_ca_annuel: int, ca_annuel: float, id_librairie
+    ) -> dict | None:
+        try:
+            self.cursor.execute(
+                """
+                UPDATE ca_annuel
+                SET ca_annuel=%s, id_librairie=%s
+                WHERE id_ca_annuel=%s
+                RETURNING *;
+                """,
+                (id_ca_annuel, ca_annuel, id_librairie),
+            )
+            self.connection.commit()
+            logger.debug(f"update_ca_annuel: {self.cursor.fetchone()}")
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"update_ca_annuel_failed: {e}")
+            return None
+
+    def delete_ca_annuel(self, id_ca_annuel: int) -> dict | None:
+        try:
+            self.cursor.execute(
+                "DELETE FROM ca_annuel WHERE id_ca_annuel=%s RETURNING *;",
+                (id_ca_annuel,),
+            )
+            self.connection.commit()
+            logger.debug(f"delete_ca_annuel: {self.cursor.fetchone()}")
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"delete_ca_annuel_failed: {e}")
+            return None
+
+    # UTILIS
 
     def close(self) -> None:
         """Ferme la connexion MongoDB."""

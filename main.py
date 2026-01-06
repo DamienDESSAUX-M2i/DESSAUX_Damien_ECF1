@@ -2,7 +2,7 @@ import argparse
 import logging
 from pathlib import Path
 
-from src import QuotesPipeline, set_up_logger
+from src import PartenaireLibrairiesPipeline, QuotesPipeline, set_up_logger
 
 DIR_PATH = Path(__file__).parent.resolve()
 
@@ -22,6 +22,8 @@ def main() -> None:
 
     if args.quotes:
         QuotesPipeline().run()
+
+    PartenaireLibrairiesPipeline(dir_path=DIR_PATH).run()
 
 
 if __name__ == "__main__":

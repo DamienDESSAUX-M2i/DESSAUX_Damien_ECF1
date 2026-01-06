@@ -1,6 +1,5 @@
 import logging
 
-from config import quotes_scraper_config
 from src.extractors import Quote, QuotesScraper
 from src.storage import MinIOStorage, PostgreSQLStorage
 
@@ -11,7 +10,7 @@ class QuotesPipeline:
     def __init__(self):
         self.quotes_scraper = QuotesScraper()
         self.postgresql_storage = PostgreSQLStorage()
-        self.minio = MinIOStorage()
+        self.minio_storage = MinIOStorage()
 
     def run(self):
         try:
