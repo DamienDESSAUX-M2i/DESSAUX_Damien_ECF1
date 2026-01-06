@@ -21,11 +21,14 @@ class BooksPipeline:
             logger.info("BOOKS PIPELINE STARTED")
             logger.info("=" * 3)
 
-            logger.info("[1/2] EXTRACTION")
+            logger.info("[1/3] EXTRACTION")
             books = self._extract()
 
-            logger.info("[2/2] LOADING")
-            self._load(books)
+            logger.info("[2/3] TRANSFORM")
+            books_transformed = self._transform(books)
+
+            logger.info("[3/3] LOADING")
+            self._load(books_transformed)
 
             logger.info("=" * 3)
             logger.info("PIPELINE COMPLETED SUCCESSFULLY")
@@ -45,6 +48,13 @@ class BooksPipeline:
         logger.info(f"Number of books scrapped: {len(books)}")
 
         self.books_scraper.close()
+
+        return books
+
+    def _transform(self, books: list[Book]) -> list[Book]:
+        # Conversion £ en € (1£ = 1.15€)
+        for book in books:
+            book.price = 1.15 * book.price
 
         return books
 

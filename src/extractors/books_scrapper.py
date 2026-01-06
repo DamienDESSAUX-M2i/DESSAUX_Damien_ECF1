@@ -132,8 +132,6 @@ class BooksScraper:
         """
         Extrait le prix d'une chaîne de texte.
 
-        Gère les formats : $999.99, $1,299.00, etc.
-
         Args:
             text: Texte contenant le prix
 
@@ -194,13 +192,13 @@ class BooksScraper:
 
     def download_image(self, book: Book) -> Book:
         """
-        Télécharge l'image d'un produit.
+        Télécharge l'image d'un livre.
 
         Args:
-            product: Produit avec image_url
+            book: livre avec url_image
 
         Returns:
-            Produit avec image_data rempli
+            Book avec image rempli
         """
         if book.url_image:
             book.image = self._fetch_image(book.url_image)
@@ -216,7 +214,7 @@ class BooksScraper:
 
 # Test du module
 if __name__ == "__main__":
-    print("Test du scraper quotes...")
+    print("Test du scraper books...")
 
     books_scraper = BooksScraper()
 

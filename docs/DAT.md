@@ -65,7 +65,7 @@ Enrichisement : Ajout latitude et longitude de chaque librairie vie API.
 
 **Books**
 
-Transformation : Pas de transformation
+Transformation : Conversion du prix du livre en euro
 
 - Quelle convention de nommage adoptez-vous ?
 
