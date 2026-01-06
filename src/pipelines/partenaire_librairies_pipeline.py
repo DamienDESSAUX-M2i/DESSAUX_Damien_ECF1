@@ -60,7 +60,7 @@ class PartenaireLibrairiesPipeline:
                 lon = None
             data_geo.append({"latitude": lat, "longitude": lon})
             # politesse
-            time.sleep(0.5)
+            time.sleep(1)
 
         df_geo = pd.DataFrame(data_geo)
 
@@ -110,32 +110,23 @@ class PartenaireLibrairiesPipeline:
             lambda x: hashlib.md5(str(x).encode()).hexdigest()
         )
 
-        # Confidentiality
-        logger.info("Apply confidentiality restriction")
-        df_ca = df["ca_annuel"].to_frame(name="ca_annuel").reset_index()
-        df.drop(columns=["ca_annuel"], inplace=True)
-
         dict_dfs["Librairies Partenaires"] = df
-        dict_dfs["CA Annuel"] = df_ca
 
         return dict_dfs
 
     def _load(self, dict_dfs_transformed: dict[str, pd.DataFrame]) -> None:
         df = dict_dfs_transformed["Librairies Partenaires"]
-        df_ca = dict_dfs_transformed["CA Annuel"]
 
         # Export JSON
-        df_backup = df.copy()
-        df_backup["ca_annuel"] = df_ca["ca_annuel"]
         self.minio_storage.upload_json(
-            data=df_backup.to_json(index=False),
+            data=df.to_json(index=False),
             filename=f"librairies_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json",
         )
 
         nb_librairies = 0
+        nb_ca_annuel = 0
         for index, row in df.iterrows():
             result = self.postgresql_storage.insert_into_librairies(
-                id_librairie=index,
                 nom_librairie=row["nom_librairie"],
                 adresse=row["adresse"],
                 code_postal=row["code_postal"],
@@ -151,16 +142,16 @@ class PartenaireLibrairiesPipeline:
 
             if result:
                 nb_librairies += 1
+
+                id_librairie = result["id_librairie"]
+                result = self.postgresql_storage.insert_into_ca_annuel(
+                    ca_annuel=row["ca_annuel"], id_librairie=id_librairie
+                )
+
+                if result:
+                    nb_ca_annuel += 1
+
         logger.info(f"Number of librairies inserted: {nb_librairies}")
-
-        nb_ca_annuel = 0
-        for index, row in df_ca.iterrows():
-            result = self.postgresql_storage.insert_into_ca_annuel(
-                id_ca_annuel=index, ca_annuel=row["ca_annuel"], id_librairie=index
-            )
-
-            if result:
-                nb_ca_annuel += 1
         logger.info(f"Number of ca_annuel inserted: {nb_ca_annuel}")
 
         self.postgresql_storage.close()

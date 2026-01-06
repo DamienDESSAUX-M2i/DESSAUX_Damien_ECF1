@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS librairies(
-   id_librairie INTEGER PRIMARY KEY,
+   id_librairie SERIAL PRIMARY KEY,
    nom_librairie VARCHAR(255),
    adresse VARCHAR(255),
    code_postal VARCHAR(255),
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS librairies(
 );
 
 CREATE TABLE IF NOT EXISTS ca_annuel(
-   id_ca_annuel INTEGER PRIMARY KEY,
+   id_ca_annuel SERIAL PRIMARY KEY,
    ca_annuel DECIMAL(10,2) CHECK (ca_annuel >= 0),
    id_librairie INT NOT NULL,
    CONSTRAINT fk_id_librairie FOREIGN KEY (id_librairie) REFERENCES librairies(id_librairie) ON DELETE CASCADE

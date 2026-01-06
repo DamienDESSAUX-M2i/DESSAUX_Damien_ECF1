@@ -296,7 +296,6 @@ class PostgreSQLStorage:
 
     def insert_into_librairies(
         self,
-        id_librairie: int,
         nom_librairie: str,
         adresse: str,
         code_postal: str,
@@ -311,9 +310,13 @@ class PostgreSQLStorage:
     ) -> dict | None:
         try:
             self.cursor.execute(
-                "INSERT INTO librairies (id_librairie, nom_librairie, adresse, code_postal, ville, contact_initiales, contact_email, contact_telephone, date_partenariat, specialite, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING RETURNING *;",
+                """
+                INSERT INTO librairies (nom_librairie, adresse, code_postal, ville, contact_initiales, contact_email, contact_telephone, date_partenariat, specialite, latitude, longitude)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT DO NOTHING
+                RETURNING id_librairie;
+                """,
                 (
-                    id_librairie,
                     nom_librairie,
                     adresse,
                     code_postal,
@@ -423,13 +426,16 @@ class PostgreSQLStorage:
             logger.error(f"select_ca_annuel_failed: {e}")
             return None
 
-    def insert_into_ca_annuel(
-        self, id_ca_annuel: int, ca_annuel: float, id_librairie: int
-    ) -> dict | None:
+    def insert_into_ca_annuel(self, ca_annuel: float, id_librairie: int) -> dict | None:
         try:
             self.cursor.execute(
-                "INSERT INTO ca_annuel (id_ca_annuel, ca_annuel, id_librairie) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING RETURNING *;",
-                (id_ca_annuel, ca_annuel, id_librairie),
+                """
+                INSERT INTO ca_annuel (ca_annuel, id_librairie)
+                VALUES (%s, %s)
+                ON CONFLICT DO NOTHING
+                RETURNING id_ca_annuel;
+                """,
+                (ca_annuel, id_librairie),
             )
             self.connection.commit()
             result = self.cursor.fetchone()
