@@ -60,7 +60,7 @@ class PartenaireLibrairiesPipeline:
                 lon = None
             data_geo.append({"latitude": lat, "longitude": lon})
             # politesse
-            time.sleep(1)
+            time.sleep(0.1)
 
         df_geo = pd.DataFrame(data_geo)
 

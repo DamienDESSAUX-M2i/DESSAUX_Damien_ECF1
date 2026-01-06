@@ -4,7 +4,7 @@ ECF1 de la formation Développeur Concepteur en Science des Donnée de M2i.
 
 ## Description
 
-Ce projet à pour objectif de concevoir et implémenter une plateforme de collecte et d'analyse de données répondant aux exigences définies dans le document `docs/statement.md`.
+Ce projet a pour objectif de concevoir et implémenter une plateforme de collecte et d'analyse de données répondant aux exigences définies dans le document `docs/statement.md`.
 
 # Architexture
 
@@ -106,9 +106,9 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Si vous utiliser uv, initialisez le projet avec `uv sync`.
+Si vous utilisez uv, initialisez le projet avec `uv sync`.
 
-3. Créer un créer à la racine du projet un fichier environement `./env` comprenant les variables d'environnement suivantes :
+3. Créer, à la racine du projet, un fichier environement `./env` comprenant les variables d'environnement suivantes :
 
 ```bash
 # ===
@@ -169,7 +169,7 @@ uv run main.py --books --images True
 | Option | Description |
 |--------|-------------|
 | `--books` | Lance la pipeline books |
-| `--images` | Type: Boléen, Défault: False, Télécharge les images des livres |
+| `--images` | Type: Boléen, Défaut: False, Télécharge les images des livres |
 | `--quotes` | Lance la pipeline quotes |
 | `--librairies` | Lance la pipeline partenaire librairies |
 

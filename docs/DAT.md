@@ -15,7 +15,7 @@ Pour le stockage des données structurées j'utiliserai `PostgreSQL`.
 
 Technologie | Avantage | Incovénient
 :- | :- | :-
-`MinIO` | Stockage object, métadata, stockage massif, stockage au format original, séparation couches logistiques (bronze, silver, gold), scalabilité horizontale | Stockage uniquement, pas d'analyse de données
+`MinIO` | Stockage object, métadata, stockage massif, stockage au format original, séparation des couches logistiques (bronze, silver, gold), scalabilité horizontale | Stockage uniquement, pas d'analyse de données
 `PostgreSQL` | Système de requête complet permettant une analyse fine des données | Données structurées uniquement, scalabilité verticale
 
 **2. Choix des technologies**
@@ -33,39 +33,39 @@ Pour l'interrogation SQL j'utiliserai python avec la bibliothèque `psycopg` ou 
 
 - Comparez avec au moins une alternative pour chaque choix.
 
-J'aurais pu utiliser AWS S3 à la place de MinIO. AWS S3 a beaucoup de similarité avec MinIO mais n'est pas gratuit.
-J'aurais pu utiliser MongoDB à la place de PostgreSQL. MongoDB est une solution No-SQL qui propose un stockage document au format BSON qui resemble au format json.
+J'aurais pu utiliser AWS à la place de MinIO. AWS a beaucoup de similarité avec MinIO mais n'est pas gratuit.
+J'aurais pu utiliser MongoDB à la place de PostgreSQL. MongoDB est une solution No-SQL qui propose un stockage document au format BSON qui resemble au format JSON.
 
 **3. Organisation des données**
 - Comment organisez-vous les données dans votre architecture ?
 
 **Quotes**
 
-Export au format json des citations scrapées dans MinIO et insertion des citations scrapées dans PostgreSQL.
+Export au format JSON des citations scrapées dans MinIO et insertion des citations scrapées dans PostgreSQL.
 
 **Librairies**
 
-Export au format json des données transformées et enrichies dans MinIO et insertion des des données transformées et enrichies dans PostgreSQL.
+Export au format JSON des données transformées et enrichies dans MinIO et insertion des données transformées et enrichies dans PostgreSQL.
 
 **Books**
 
-Export au format json des livres scrapées dans MinIO et insertion des livres scrapées dans PostgreSQL.
+Export au format JSON des livres scrapées dans MinIO et insertion des livres scrapées dans PostgreSQL.
 
 - Proposez-vous des couches de transformation ? Lesquelles et pourquoi ?
 
 **Quotes**
 
-Transformation : Mapping des auteurs, citations et tags pour insertion dans PostgreSQL
+Transformation : Mapping des auteurs, citations et tags pour insertion dans PostgreSQL.
 
 **Librairies**
 
-Transformation : Suppression des doublons, remplissage des données manquantes, annonimisation (RGPD), confidentialité du CA et mapping des librairies et ca_annuel pour insertion dans PostgreSQL.
+Transformation : Suppression des doublons, remplissage des données manquantes, annonimisation (RGPD).
 
 Enrichisement : Ajout latitude et longitude de chaque librairie vie API.
 
 **Books**
 
-Transformation : Conversion du prix du livre en euro
+Transformation : Conversion du prix du livre en euro.
 
 - Quelle convention de nommage adoptez-vous ?
 
@@ -87,7 +87,7 @@ Images MinIO : titre_du_livre.jpeg
 
 Export MinIO : books_YYYYMMDDTHHmmSS.json
 
-Insertion PosgreSQL : 1 tables (confère MLD)
+Insertion PosgreSQL : 1 table (confère MLD)
 
 **4. Modélisation des données**
 - Quel modèle de données proposez-vous pour la couche finale ?
@@ -102,7 +102,7 @@ Modèle relationnel 2 tables (confère MLD)
 
 **Books**
 
-Modèle relationnel 1 tables (confère MLD)
+Modèle relationnel 1 table (confère MLD)
 
 - Fournissez un schéma (diagramme entité-relation ou autre)
 
@@ -122,15 +122,15 @@ Modèle relationnel 1 tables (confère MLD)
 
 **Quotes**
 
-Les données étant structurées j'ai opté pour un modèle relationnel. Un auteur pouvant créé plusieurs citations, j'ai décidé de créer une table authors. Une citation pouvant posséder plusieurs tags et un tag pouvant être affilié à plusieurs citations, j'ai créé deux tables quotes et tags et une table d'association quotes_tags.
+Les données étant structurées, j'ai opté pour un modèle relationnel. Un auteur pouvant créé plusieurs citations, j'ai décidé de créer une table authors. Une citation pouvant posséder plusieurs tags et un tag pouvant être affilié à plusieurs citations, j'ai créé deux tables quotes et tags et une table d'association quotes_tags.
 
 **Librairies**
 
-Les données étant structurées j'ai opté pour un modèle relationnel. J'ai créé une table librairies regroupant toutes les données à l'exception du CA et une table ca_annuel contenant le CA de chaque librairie. Le CA étant une données confidentielle, un accès privè doit être donné à la table ca_annuel. Une table contact aurait pu être ajoutée.
+Les données étant structurées, j'ai opté pour un modèle relationnel. J'ai créé une table librairies regroupant toutes les données à l'exception du CA et une table ca_annuel contenant le CA de chaque librairie. Le CA étant une données confidentielle, un accès privè doit être donné à la table ca_annuel. Une table contact aurait pu être ajoutée.
 
 **Books**
 
-Les données étant structurées j'ai opté pour un modèle relationnel. J'ai créé une table books contenant le titre, le prix, l'avis, la disponibilité, la catégorie et l'url de l'image de chaque livre.
+Les données étant structurées, j'ai opté pour un modèle relationnel. J'ai créé une table books contenant le titre, le prix, l'avis, la disponibilité, la catégorie et l'url de l'image de chaque livre.
 
 **5. Conformité RGPD**
 - Quelles données personnelles identifiez-vous dans les sources ?
@@ -151,8 +151,8 @@ Aucune donnée personnelle.
 
 **Librairie**
 
-Pour le nom de contact je ne garde que les initiales. Pour le téléphone de contact et l'email de contact je hash les données.
+Pour le nom de contact, je ne garde que les initiales. Pour le téléphone de contact et l'email de contact, je hashe les données.
 
 - Comment gérez-vous le droit à l'effacement ?
 
-Sur le site du CNIL (https://www.cnil.fr/fr/guide-de-la-securite-des-donnees-personnelles-nouvelle-edition-2024) on retrouve un guide pratique de la sécurité des données personnelles.
+Je met à disposition une requête SQL pour effacer les colonnes `contact_initiales`, `contact_email` et `contact_telephone` de la table `librairies` dans le fichier `docs/RGPD_CONFORMITE.md`. Il faudra également modifier les fichiers d'export dans MinIO.
