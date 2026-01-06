@@ -1,6 +1,7 @@
 import json
 import logging
 from datetime import datetime, timezone
+from typing import Any
 
 from src.extractors import Quote, QuotesScraper
 from src.storage import MinIOStorage, PostgreSQLStorage
@@ -52,7 +53,7 @@ class QuotesPipeline:
 
         return quotes
 
-    def _transform(self, quotes: list[Quote]) -> list[dict]:
+    def _transform(self, quotes: list[Quote]) -> tuple[Any]:
         dict_authors = {}
         list_quotes = []
         dict_tags = {}

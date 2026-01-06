@@ -2,7 +2,12 @@ import argparse
 import logging
 from pathlib import Path
 
-from src import PartenaireLibrairiesPipeline, QuotesPipeline, set_up_logger
+from src import (
+    BooksPipeline,
+    PartenaireLibrairiesPipeline,
+    QuotesPipeline,
+    set_up_logger,
+)
 
 DIR_PATH = Path(__file__).parent.resolve()
 
@@ -23,10 +28,17 @@ def main() -> None:
         action="store_true",
         help="Active partenaire librairies pipeline",
     )
+    parser.add_argument(
+        "--images", type=bool, default=False, help="Télécharge les images des livres"
+    )
+    parser.add_argument("--books", action="store_true", help="Active books pipeline")
     args = parser.parse_args()
 
     if args.quotes:
         QuotesPipeline().run()
+
+    if args.books:
+        BooksPipeline(download_image=args.images).run()
 
     if args.librairies:
         PartenaireLibrairiesPipeline(dir_path=DIR_PATH).run()

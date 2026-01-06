@@ -40,6 +40,15 @@ class QuotesScraperConfig:
     delay: float = 1.0
     timeout: int = 30
     max_retries: int = 3
+    max_pages: int = 10
+
+
+@dataclass
+class BooksScraperConfig:
+    base_url: str = "https://books.toscrape.com/"
+    delay: float = 1.0
+    timeout: int = 30
+    max_retries: int = 3
     max_pages: int = 20
 
 
@@ -55,4 +64,5 @@ class APIAdressConfig:
 minio_config = MinIOConfig()
 postgresql_config = PostgreSQLConfig()
 quotes_scraper_config = QuotesScraperConfig()
+books_scraper_config = BooksScraperConfig()
 api_adress_config = APIAdressConfig()

@@ -134,12 +134,18 @@ uv run main.py --quotes
 python main.py --librairies
 ## uv
 uv run main.py --librairies
+
+# books pipeline
+python main.py --books
+## uv
+uv run main.py --books
 ```
 
 ### Options disponibles
 
 | Option | Description |
 |--------|-------------|
+| `--books` | Lance la pipeline books |
 | `--quotes` | Lance la pipeline quotes |
 | `--librairies` | Lance la pipeline partenaire librairies |
 
@@ -154,6 +160,8 @@ DESSAUX_DAMIEN_ECF1/
 │   └───partenaire_librairies.xlsx
 ├───docs
 │   ├───MLD
+│   │   ├───MLD_books.jpg
+│   │   ├───MLD_books.loo
 │   │   ├───MLD_librairies.jpg
 │   │   ├───MLD_librairies.loo
 │   │   ├───MLD_quotes.jpg
@@ -164,16 +172,19 @@ DESSAUX_DAMIEN_ECF1/
 ├───logs
 ├───postgresql_initdb
 │   ├───01_tables_quotes.sql
-│   └───02_tables_librairies.sql
+│   ├───02_tables_librairies.sql
+│   └───03_tables_books.sql
 ├───sql
 │   └───analyses.sql
 ├───src
 │   ├───extractors
 │   │   ├───api_adress_extractor.py
+│   │   ├───books_scrapper.py
 │   │   ├───excel_extractor.py
 │   │   ├───quotes_scrapper.py
 │   │   └───__init__.py
 │   ├───pipelines
+│   │   ├───books_pipeline.py
 │   │   ├───partenaire_librairies_pipeline.py
 │   │   ├───quotes_pipeline.py
 │   │   └───__init__.py

@@ -35,8 +35,9 @@ class PostgreSQLStorage:
                 (id_author, author_name),
             )
             self.connection.commit()
-            logger.debug(f"insert_into_authors: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_authors: {result}")
+            return result
         except Exception as e:
             logger.error(f"insert_into_authors_failed: {e}")
             return None
@@ -53,8 +54,9 @@ class PostgreSQLStorage:
                 (author_name, id_author),
             )
             self.connection.commit()
-            logger.debug(f"update_author: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_author: {result}")
+            return result
         except Exception as e:
             logger.error(f"update_author_failed: {e}")
             return None
@@ -66,8 +68,9 @@ class PostgreSQLStorage:
                 (id_author,),
             )
             self.connection.commit()
-            logger.debug(f"delete_author: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_author: {result}")
+            return result
         except Exception as e:
             logger.error(f"delete_author_failed: {e}")
             return None
@@ -92,8 +95,9 @@ class PostgreSQLStorage:
                 (id_tag, tag_name),
             )
             self.connection.commit()
-            logger.debug(f"insert_into_tags: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_tags: {result}")
+            return result
         except Exception as e:
             logger.error(f"insert_into_tags_failed: {e}")
             return None
@@ -110,8 +114,9 @@ class PostgreSQLStorage:
                 (tag_name, id_tag),
             )
             self.connection.commit()
-            logger.debug(f"update_tag: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_tag: {result}")
+            return result
         except Exception as e:
             logger.error(f"update_tag_failed: {e}")
             return None
@@ -123,8 +128,9 @@ class PostgreSQLStorage:
                 (id_tag,),
             )
             self.connection.commit()
-            logger.debug(f"delete_tag: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_tag: {result}")
+            return result
         except Exception as e:
             logger.error(f"delete_tag_failed: {e}")
             return None
@@ -159,8 +165,9 @@ class PostgreSQLStorage:
                 (id_quote, text, id_author),
             )
             self.connection.commit()
-            logger.debug(f"insert_into_quotes: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_quotes: {result}")
+            return result
         except Exception as e:
             logger.error(f"insert_into_quotes_failed: {e}")
             return None
@@ -177,8 +184,9 @@ class PostgreSQLStorage:
                 (text, id_author, id_quote),
             )
             self.connection.commit()
-            logger.debug(f"update_quote: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_quote: {result}")
+            return result
         except Exception as e:
             logger.error(f"update_quote_failed: {e}")
             return None
@@ -190,8 +198,9 @@ class PostgreSQLStorage:
                 (id_quote,),
             )
             self.connection.commit()
-            logger.debug(f"delete_quote: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_quote: {result}")
+            return result
         except Exception as e:
             logger.error(f"delete_quote_failed: {e}")
             return None
@@ -226,8 +235,9 @@ class PostgreSQLStorage:
                 (id_quote, id_tag),
             )
             self.connection.commit()
-            logger.debug(f"insert_into_quotes_tags: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_quotes_tags: {result}")
+            return result
         except Exception as e:
             logger.error(f"insert_into_quotes_failed: {e}")
             return None
@@ -246,8 +256,9 @@ class PostgreSQLStorage:
                 (new_id_quote, new_id_tag, id_quote, id_tag),
             )
             self.connection.commit()
-            logger.debug(f"update_quote_tag: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_quote_tag: {result}")
+            return result
         except Exception as e:
             logger.error(f"update_quote_tag_failed: {e}")
             return None
@@ -259,8 +270,9 @@ class PostgreSQLStorage:
                 (id_quote, id_tag),
             )
             self.connection.commit()
-            logger.debug(f"delete_quote_tag: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_quote_tag: {result}")
+            return result
         except Exception as e:
             logger.error(f"delete_quote_tag_failed: {e}")
             return None
@@ -316,8 +328,9 @@ class PostgreSQLStorage:
                 ),
             )
             self.connection.commit()
-            logger.debug(f"insert_into_librairies: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_librairies: {result}")
+            return result
         except Exception as e:
             logger.error(f"insert_into_librairies_failed: {e}")
             return None
@@ -361,8 +374,9 @@ class PostgreSQLStorage:
                 ),
             )
             self.connection.commit()
-            logger.debug(f"update_librairie: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_librairie: {result}")
+            return result
         except Exception as e:
             logger.error(f"update_librairie_failed: {e}")
             return None
@@ -374,8 +388,9 @@ class PostgreSQLStorage:
                 (id_librairie,),
             )
             self.connection.commit()
-            logger.debug(f"delete_librairie: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_librairie: {result}")
+            return result
         except Exception as e:
             logger.error(f"delete_librairie_failed: {e}")
             return None
@@ -417,8 +432,9 @@ class PostgreSQLStorage:
                 (id_ca_annuel, ca_annuel, id_librairie),
             )
             self.connection.commit()
-            logger.debug(f"insert_into_ca_annuel: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_ca_annuel: {result}")
+            return result
         except Exception as e:
             logger.error(f"insert_into_ca_annuel_failed: {e}")
             return None
@@ -437,8 +453,9 @@ class PostgreSQLStorage:
                 (id_ca_annuel, ca_annuel, id_librairie),
             )
             self.connection.commit()
-            logger.debug(f"update_ca_annuel: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_ca_annuel: {result}")
+            return result
         except Exception as e:
             logger.error(f"update_ca_annuel_failed: {e}")
             return None
@@ -450,10 +467,88 @@ class PostgreSQLStorage:
                 (id_ca_annuel,),
             )
             self.connection.commit()
-            logger.debug(f"delete_ca_annuel: {self.cursor.fetchone()}")
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_ca_annuel: {result}")
+            return result
         except Exception as e:
             logger.error(f"delete_ca_annuel_failed: {e}")
+            return None
+
+    # BOOKS
+
+    def select_book(self, id_book: int) -> dict | None:
+        try:
+            self.cursor.execute(
+                "SELECT * FROM books WHERE id_book=%s;",
+                (id_book,),
+            )
+            return self.cursor.fetchone()
+        except Exception as e:
+            logger.error(f"select_author_failed: {e}")
+            return None
+
+    def insert_into_books(
+        self,
+        title: str,
+        price: float,
+        rating: int,
+        availability: bool,
+        category: str,
+        url_image: str,
+    ) -> dict | None:
+        try:
+            self.cursor.execute(
+                "INSERT INTO books (title, price, rating, availability, category, url_image) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING RETURNING *;",
+                (title, price, rating, availability, category, url_image),
+            )
+            self.connection.commit()
+            result = self.cursor.fetchone()
+            logger.debug(f"insert_into_books: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"insert_into_books_failed: {e}")
+            return None
+
+    def update_book(
+        self,
+        id_book: int,
+        title: str,
+        price: float,
+        rating: int,
+        availability: bool,
+        category: str,
+        url_image: str,
+    ) -> dict | None:
+        try:
+            self.cursor.execute(
+                """
+                UPDATE books
+                SET title=%s, price=%s, rating=%s, availability=%s, category=%s, url_image=%s
+                WHERE id_book=%s
+                RETURNING *;
+                """,
+                (id_book, title, price, rating, availability, category, url_image),
+            )
+            self.connection.commit()
+            result = self.cursor.fetchone()
+            logger.debug(f"update_book: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"update_book_failed: {e}")
+            return None
+
+    def delete_book(self, id_book: int) -> dict | None:
+        try:
+            self.cursor.execute(
+                "DELETE FROM books WHERE id_book=%s RETURNING *;",
+                (id_book,),
+            )
+            self.connection.commit()
+            result = self.cursor.fetchone()
+            logger.debug(f"delete_book: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"delete_book_failed: {e}")
             return None
 
     # UTILIS
