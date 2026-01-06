@@ -158,8 +158,10 @@ uv run main.py --librairies
 
 # books pipeline
 python main.py --books
+python main.py --books --images True
 ## uv
 uv run main.py --books
+uv run main.py --books --images True
 ```
 
 ### Options disponibles
@@ -167,6 +169,7 @@ uv run main.py --books
 | Option | Description |
 |--------|-------------|
 | `--books` | Lance la pipeline books |
+| `--images` | Type: Boléen, Défault: False, Télécharge les images des livres |
 | `--quotes` | Lance la pipeline quotes |
 | `--librairies` | Lance la pipeline partenaire librairies |
 
