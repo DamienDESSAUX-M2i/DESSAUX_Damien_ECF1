@@ -18,12 +18,18 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Activates Pipelines")
     parser.add_argument("--quotes", action="store_true", help="Active quotes pipeline")
+    parser.add_argument(
+        "--librairies",
+        action="store_true",
+        help="Active partenaire librairies pipeline",
+    )
     args = parser.parse_args()
 
     if args.quotes:
         QuotesPipeline().run()
 
-    PartenaireLibrairiesPipeline(dir_path=DIR_PATH).run()
+    if args.librairies:
+        PartenaireLibrairiesPipeline(dir_path=DIR_PATH).run()
 
 
 if __name__ == "__main__":
