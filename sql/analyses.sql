@@ -57,3 +57,11 @@ ORDER BY total_quotes DESC
 LIMIT 3;
 
 -- 5. Une requête croisant au moins 2 sources de données
+
+-- Nombre de livre dans le librairie 'Librairie du Marais'.
+SELECT
+    COUNT(b.id_book) AS total_book,
+    l.nom_librairie
+FROM books AS b, librairies AS l
+WHERE l.nom_librairie = 'Librairie du Marais' AND b.id_book <= 10
+GROUP BY l.nom_librairie;
