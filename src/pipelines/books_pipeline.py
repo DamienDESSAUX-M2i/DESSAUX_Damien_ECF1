@@ -1,4 +1,6 @@
+import json
 import logging
+from datetime import datetime, timezone
 
 from src.extractors import Book, BooksScraper
 from src.storage import MinIOStorage, PostgreSQLStorage
@@ -47,6 +49,12 @@ class BooksPipeline:
         return books
 
     def _load(self, books: list[Book]) -> None:
+        # Export JSON
+        self.minio_storage.upload_json(
+            data=json.dumps([book.to_dict() for book in books]),
+            filename=f"quotes_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json",
+        )
+
         nb_books_inserted = 0
         nb_image_uploaded = 0
 

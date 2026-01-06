@@ -34,6 +34,7 @@ class Book:
             "rating": self.rating,
             "availability": self.availability,
             "category": self.category,
+            "url_image": self.url_image,
         }
 
 

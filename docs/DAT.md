@@ -47,6 +47,10 @@ Export au format json des citations scrapées dans MinIO et insertion des citati
 
 Export au format json des données transformées et enrichies dans MinIO et insertion des des données transformées et enrichies dans PostgreSQL.
 
+**Books**
+
+Export au format json des livres scrapées dans MinIO et insertion des livres scrapées dans PostgreSQL.
+
 - Proposez-vous des couches de transformation ? Lesquelles et pourquoi ?
 
 **Quotes**
@@ -58,6 +62,10 @@ Transformation : Mapping des auteurs, citations et tags pour insertion dans Post
 Transformation : Suppression des doublons, remplissage des données manquantes, annonimisation (RGPD), confidentialité du CA et mapping des librairies et ca_annuel pour insertion dans PostgreSQL.
 
 Enrichisement : Ajout latitude et longitude de chaque librairie vie API.
+
+**Books**
+
+Transformation : Pas de transformation
 
 - Quelle convention de nommage adoptez-vous ?
 
@@ -73,6 +81,14 @@ Export MinIO : librairies_YYYYMMDDTHHmmSS.json
 
 Insertion PosgreSQL : 2 tables (confère MLD)
 
+**Books**
+
+Images MinIO : titre_du_livre.jpeg
+
+Export MinIO : books_YYYYMMDDTHHmmSS.json
+
+Insertion PosgreSQL : 1 tables (confère MLD)
+
 **4. Modélisation des données**
 - Quel modèle de données proposez-vous pour la couche finale ?
 
@@ -84,6 +100,10 @@ Modèle relationnel 4 tables (confère MLD)
 
 Modèle relationnel 2 tables (confère MLD)
 
+**Books**
+
+Modèle relationnel 1 tables (confère MLD)
+
 - Fournissez un schéma (diagramme entité-relation ou autre)
 
 **Quotes**
@@ -93,6 +113,10 @@ Modèle relationnel 2 tables (confère MLD)
 **Librairies**
 
 ![MLD Librairies](./MLD/MLD_librairies.jpg "MLD Librairies")
+
+**Quotes**
+
+![MLD Books](./MLD/MLD_books.jpg "MLD Books")
 
 - Justifiez vos choix de modélisation
 
@@ -104,6 +128,10 @@ Les données étant structurées j'ai opté pour un modèle relationnel. Un aute
 
 Les données étant structurées j'ai opté pour un modèle relationnel. J'ai créé une table librairies regroupant toutes les données à l'exception du CA et une table ca_annuel contenant le CA de chaque librairie. Le CA étant une données confidentielle, un accès privè doit être donné à la table ca_annuel. Une table contact aurait pu être ajoutée.
 
+**Books**
+
+Les données étant structurées j'ai opté pour un modèle relationnel. J'ai créé une table books contenant le titre, le prix, l'avis, la disponibilité, la catégorie et l'url de l'image de chaque livre.
+
 **5. Conformité RGPD**
 - Quelles données personnelles identifiez-vous dans les sources ?
 
@@ -114,6 +142,10 @@ Aucune donnée personnelle.
 **Librairie**
 
 Le nom de contact, l'email de contact et le téléphone de contact sont des données personnelles.
+
+**Books**
+
+Aucune donnée personnelle.
 
 - Quelles mesures de protection proposez-vous ?
 

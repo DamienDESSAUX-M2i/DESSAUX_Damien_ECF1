@@ -99,7 +99,7 @@ class QuotesPipeline:
         dict_tags: dict,
         list_quotes_tags: list,
     ) -> None:
-        # backup
+        # Export JSON
         self.minio_storage.upload_json(
             data=json_quotes,
             filename=f"quotes_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json",

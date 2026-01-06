@@ -76,6 +76,7 @@ class PartenaireLibrairiesPipeline:
         df.drop_duplicates()
 
         # type
+        logger.info("Force type")
         df["code_postal"] = df["code_postal"].astype("str")
         df["contact_telephone"] = df["contact_telephone"].astype("str")
 
@@ -97,7 +98,7 @@ class PartenaireLibrairiesPipeline:
         df["longitude"] = df["longitude"].fillna(value=0)
 
         # RGPD
-        logger.info("RGPD")
+        logger.info("Apply RGPD restriction")
         df["contact_initiales"] = df["contact_nom"].apply(
             lambda x: "".join([word[0] for word in x.split()])
         )
@@ -110,7 +111,7 @@ class PartenaireLibrairiesPipeline:
         )
 
         # Confidentiality
-        logger.info("Confidentiality")
+        logger.info("Apply confidentiality restriction")
         df_ca = df["ca_annuel"].to_frame(name="ca_annuel").reset_index()
         df.drop(columns=["ca_annuel"], inplace=True)
 
@@ -123,7 +124,7 @@ class PartenaireLibrairiesPipeline:
         df = dict_dfs_transformed["Librairies Partenaires"]
         df_ca = dict_dfs_transformed["CA Annuel"]
 
-        # backup
+        # Export JSON
         df_backup = df.copy()
         df_backup["ca_annuel"] = df_ca["ca_annuel"]
         self.minio_storage.upload_json(
