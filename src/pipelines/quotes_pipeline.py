@@ -1,4 +1,6 @@
+import json
 import logging
+from datetime import datetime, timezone
 
 from src.extractors import Quote, QuotesScraper
 from src.storage import MinIOStorage, PostgreSQLStorage
@@ -22,12 +24,14 @@ class QuotesPipeline:
             quotes = self._extract()
 
             logger.info("[2/3] TRANSFORMATION")
-            dict_authors, list_quotes, dict_tags, list_quotes_tags = self._transform(
-                quotes
+            json_quotes, dict_authors, list_quotes, dict_tags, list_quotes_tags = (
+                self._transform(quotes)
             )
 
             logger.info("[3/3] LOADING")
-            self._load(dict_authors, list_quotes, dict_tags, list_quotes_tags)
+            self._load(
+                json_quotes, dict_authors, list_quotes, dict_tags, list_quotes_tags
+            )
 
             logger.info("=" * 3)
             logger.info("PIPELINE COMPLETED SUCCESSFULLY")
@@ -82,15 +86,24 @@ class QuotesPipeline:
         logger.info(f"Number of authors: {len(dict_authors)}")
         logger.info(f"Number of tags: {len(dict_tags)}")
 
-        return dict_authors, list_quotes, dict_tags, list_quotes_tags
+        json_quotes = json.dumps([quote.to_dict() for quote in quotes])
+
+        return json_quotes, dict_authors, list_quotes, dict_tags, list_quotes_tags
 
     def _load(
         self,
+        json_quotes: str,
         dict_authors: dict,
         list_quotes: list,
         dict_tags: dict,
         list_quotes_tags: list,
     ) -> None:
+        # backup
+        self.minio_storage.upload_json(
+            data=json_quotes,
+            filename=f"quotes_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json",
+        )
+
         # authors
         nb_authors_inserted = 0
         for author_name, id_author in dict_authors.items():

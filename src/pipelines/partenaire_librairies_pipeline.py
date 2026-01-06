@@ -123,6 +123,14 @@ class PartenaireLibrairiesPipeline:
         df = dict_dfs_transformed["Librairies Partenaires"]
         df_ca = dict_dfs_transformed["CA Annuel"]
 
+        # backup
+        df_backup = df.copy()
+        df_backup["ca_annuel"] = df_ca["ca_annuel"]
+        self.minio_storage.upload_json(
+            data=df_backup.to_json(index=False),
+            filename=f"librairies_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}.json",
+        )
+
         nb_librairies = 0
         for index, row in df.iterrows():
             result = self.postgresql_storage.insert_into_librairies(
