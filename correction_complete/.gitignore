@@ -1,0 +1,46 @@
+# =============================================================================
+# ECF DataPulse Analytics - Fichiers à ignorer
+# =============================================================================
+
+# Environnement Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# Variables d'environnement (contient des secrets)
+.env
+
+# Logs
+logs/
+*.log
+
+# Données sensibles
+data/*.xlsx
+!data/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes locaux
+mongodb_data/
+postgres_data/
+minio_data/
+
+# Fichiers temporaires de scraping
+*.json
+!init/*.json
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
